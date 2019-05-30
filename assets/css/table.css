@@ -1,0 +1,15 @@
+table {
+    width: 100%;
+}
+
+.button-content {
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: right;
+}
+
+.mdl-button--fab {
+    background-color: #00BCD4 !important;
+    color: white;
+}
