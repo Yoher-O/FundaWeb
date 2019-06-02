@@ -6,9 +6,9 @@ $( document ).ready(function() {
 });
 
 function eliminar() {
-    $("#categories-tbody").on("click",".delete", function(){
+    $("#brands-tbody").on("click",".delete", function(){
         d = $(this).parents("tr").find("td");
-        deleteCategories({name: d[1].textContent, id: d[0].textContent}, $(this).parents("tr"));
+        deletebrands({name: d[1].textContent, id: d[0].textContent}, $(this).parents("tr"));
     }); 
 }
 
@@ -19,13 +19,13 @@ function showToast(message) {
 }
 
 function save() {
-    $("#categoriesForm").submit(function(e) {
+    $("#brandsForm").submit(function(e) {
         e.preventDefault();
         showLoading();
         $.ajax({
-                url: '?c=categories&a=Save',
+                url: '?c=brands&a=Save',
                 type: 'POST',
-                data: {"id": $("#id").val(), "name": $("#name").val(), "description": $("#description").val()},
+                data: {"id": $("#id").val(), "name": $("#name").val()},
                 success: function(result) {
                     if (result) {
                         setTimeout(function () {
@@ -36,7 +36,7 @@ function save() {
                             else {
                                 showToast('Se guardo exitosamente');
                             }
-                            window.location = '?c=categories';
+                            window.location = '?c=brands';
                         }, 3000);
                     }
                 }
@@ -45,10 +45,10 @@ function save() {
 }
 
 function update() {
-    $("#categories-tbody").on("click",".update", function(){
+    $("#brands-tbody").on("click",".update", function(){
         d = $(this).parents("tr").find("td");
         console.log(d[1].textContent,d[2].textContent)
-        window.location = `?c=categories&a=add&id=${d[0].textContent}&name=${d[1].textContent}&description=${d[2].textContent}`;
+        window.location = `?c=brands&a=add&id=${d[0].textContent}&name=${d[1].textContent}`;
     });
 }
 
@@ -69,9 +69,9 @@ function hideLoading() {
     }, 400);
 }
 
-function deleteCategories(item, row) {
+function deletebrands(item, row) {
     showDialog({
-        title: 'Eliminar Categoría',
+        title: 'Eliminar Marca',
         text: `¿Seguro que desea eliminar a ${item.name}?`,
         negative: {
             id: 'cancel-button',
@@ -85,7 +85,7 @@ function deleteCategories(item, row) {
                 showLoading();
                 $.ajax({
                     type: 'POST',
-                    url:"?c=categories&a=Eliminar",
+                    url:"?c=brands&a=Eliminar",
                     data: {'id': item.id},
                     success: function(result) {
                         if (result) {
@@ -199,12 +199,13 @@ function  listar() {
     showLoading();
     $.ajax({
         type: 'GET',
-        url:"?c=categories&a=Listar",
+        url:"?c=brands&a=Listar",
         success: function(result){
           if(result){
-            var list = JSON.parse(result);            
+            console.log(result);    
+            var list = JSON.parse(result);
             $.each(list.data, function(i, item) {
-                $("#categories-tbody").append(
+                $("#brands-tbody").append(
                     "<tr>" +
                       `<td class="hidden">${item.id}</td>` +
                       `<td class="mdl-data-table__cell--non-numeric">${item.nombre}</td>` +

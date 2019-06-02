@@ -2,7 +2,6 @@
   <thead>
     <tr>
       <th class="mdl-data-table__cell--non-numeric">Nombre</th>
-      <th class="mdl-data-table__cell--non-numeric">Descripcion</th>
       <th>Actions</th>
     </tr>
   </thead>

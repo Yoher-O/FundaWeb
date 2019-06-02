@@ -6,9 +6,9 @@ $( document ).ready(function() {
 });
 
 function eliminar() {
-    $("#categories-tbody").on("click",".delete", function(){
+    $("#products-tbody").on("click",".delete", function(){
         d = $(this).parents("tr").find("td");
-        deleteCategories({name: d[1].textContent, id: d[0].textContent}, $(this).parents("tr"));
+        deleteproducts({name: d[1].textContent, id: d[0].textContent}, $(this).parents("tr"));
     }); 
 }
 
@@ -19,13 +19,20 @@ function showToast(message) {
 }
 
 function save() {
-    $("#categoriesForm").submit(function(e) {
+    $("#productsForm").submit(function(e) {
         e.preventDefault();
         showLoading();
         $.ajax({
-                url: '?c=categories&a=Save',
+                url: '?c=products&a=Save',
                 type: 'POST',
-                data: {"id": $("#id").val(), "name": $("#name").val(), "description": $("#description").val()},
+                data: {
+                    "id": $("#id").val(), 
+                    "code": $("#code").val(), 
+                    "description": $("#description").val(), 
+                    "price": $("#price").val(), 
+                    "brand": $("#val-brand").val(),
+                    "category": $("#val-category").val(),
+                },
                 success: function(result) {
                     if (result) {
                         setTimeout(function () {
@@ -36,7 +43,7 @@ function save() {
                             else {
                                 showToast('Se guardo exitosamente');
                             }
-                            window.location = '?c=categories';
+                            window.location = '?c=products';
                         }, 3000);
                     }
                 }
@@ -45,10 +52,9 @@ function save() {
 }
 
 function update() {
-    $("#categories-tbody").on("click",".update", function(){
+    $("#products-tbody").on("click",".update", function(){
         d = $(this).parents("tr").find("td");
-        console.log(d[1].textContent,d[2].textContent)
-        window.location = `?c=categories&a=add&id=${d[0].textContent}&name=${d[1].textContent}&description=${d[2].textContent}`;
+        window.location = `?c=products&a=add&id=${d[0].textContent}&code=${d[1].textContent}&description=${d[2].textContent}&brand=${d[3].textContent}&price=${d[5].textContent}&category=${d[6].textContent}`;
     });
 }
 
@@ -69,9 +75,9 @@ function hideLoading() {
     }, 400);
 }
 
-function deleteCategories(item, row) {
+function deleteproducts(item, row) {
     showDialog({
-        title: 'Eliminar Categoría',
+        title: 'Eliminar Producto',
         text: `¿Seguro que desea eliminar a ${item.name}?`,
         negative: {
             id: 'cancel-button',
@@ -85,7 +91,7 @@ function deleteCategories(item, row) {
                 showLoading();
                 $.ajax({
                     type: 'POST',
-                    url:"?c=categories&a=Eliminar",
+                    url:"?c=products&a=Eliminar",
                     data: {'id': item.id},
                     success: function(result) {
                         if (result) {
@@ -199,15 +205,21 @@ function  listar() {
     showLoading();
     $.ajax({
         type: 'GET',
-        url:"?c=categories&a=Listar",
+        url:"?c=products&a=Listar",
         success: function(result){
           if(result){
-            var list = JSON.parse(result);            
+            var list = JSON.parse(result);
             $.each(list.data, function(i, item) {
-                $("#categories-tbody").append(
+                $("#products-tbody").append(
                     "<tr>" +
-                      `<td class="hidden">${item.id}</td>` +
+                      `<td class="mdl-data-table__cell--non-numeric hidden">${item.id}</td>` +
+                      `<td class="mdl-data-table__cell--non-numeric">${item.codigo}</td>` +
+                      `<td class="mdl-data-table__cell--non-numeric">${item.descripcion}</td>` +
+                      `<td class="mdl-data-table__cell--non-numeric hidden">${item.marca}</td>` +
                       `<td class="mdl-data-table__cell--non-numeric">${item.nombre}</td>` +
+                      `<td class="mdl-data-table__cell--non-numeric">${item.precio}</td>` +
+                      `<td class="mdl-data-table__cell--non-numeric hidden">${item.categoria}</td>` +
+                      `<td class="mdl-data-table__cell--non-numeric">${item.nombreC}</td>` +
                       `
                        <td>
                          <button id="${item.id}" class="mdl-button mdl-js-button mdl-button--icon">
